@@ -110,7 +110,7 @@ def main():
 
         st.markdown("---")
 
-        show_playback = st.checkbox("Show Battle Playback (Animations)", value=False)
+        show_playback = st.checkbox("Show Battle Playback (Animations)", value=True)
 
         # Battle Button
         if st.button("Battle!", type="primary", use_container_width=True):
@@ -144,15 +144,33 @@ def main():
                 
             # Announce winner
             st.markdown("### Results")
+            
+            winner_img_html = ""
             if results["winner"] == "Draw":
                 msg = "The battle ended in a Draw!"
             else:
                 msg = f"{results['winner'].capitalize()} wins the battle!"
                 
-            st.markdown(f'<div class="gameboy-dialog">{msg}</div>', unsafe_allow_html=True)
+                # Retrieve the sprite URL for the winning Pokemon
+                if results["winner"].casefold() == p1_pokemon["name"].casefold():
+                    winner_img_url = pokeapi.get_sprite_url(p1_pokemon)
+                elif results["winner"].casefold() == p2_pokemon["name"].casefold():
+                    winner_img_url = pokeapi.get_sprite_url(p2_pokemon)
+                else:
+                    winner_img_url = None
+                    
+                if winner_img_url:
+                    winner_img_html = f'<img src="{winner_img_url}" style="width: 80px; height: 80px; margin-right: 15px; image-rendering: pixelated;" />'
+                
+            st.markdown(f'''
+            <div class="gameboy-dialog" style="display: flex; align-items: center;">
+                {winner_img_html}
+                <span>{msg}</span>
+            </div>
+            ''', unsafe_allow_html=True)
                 
             # Display HP History Chart
-            hp_fig = charts.render_hp_history(results["hp_history"])
+            hp_fig = charts.render_hp_history(results["hp_history"], p1_pokemon, p2_pokemon)
             if hp_fig:
                 st.plotly_chart(hp_fig, use_container_width=True)
                 

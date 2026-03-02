@@ -9,10 +9,9 @@ def render_pokemon_info(pokemon_data: dict):
     if not pokemon_data:
         return
     
-    # Sprite
+    # Sprite HTML
     sprite_url = pokeapi.get_sprite_url(pokemon_data)
-    if sprite_url:
-        st.image(sprite_url, width=150)
+    sprite_html = f'<img src="{sprite_url}" style="width: 120px; height: 120px; object-fit: contain; image-rendering: pixelated; margin-right: 15px;" />' if sprite_url else ''
     
     # Name & Types HTML
     name = pokemon_data.get("name", "Unknown").title()
@@ -21,9 +20,12 @@ def render_pokemon_info(pokemon_data: dict):
     badges_html = "".join([f'<span class="type-badge type-{t.lower()}">{t}</span>' for t in types])
     
     html_content = f"""
-    <div class="pokemon-card">
-        <h3 class="pkmn-text" style="margin-top:0;">{name}</h3>
-        <div>{badges_html}</div>
+    <div class="pokemon-card" style="display: flex; align-items: center; justify-content: flex-start;">
+        {sprite_html}
+        <div>
+            <h3 class="pkmn-text" style="margin-top:0; margin-bottom: 10px;">{name}</h3>
+            <div>{badges_html}</div>
+        </div>
     </div>
     """
     st.markdown(html_content, unsafe_allow_html=True)

@@ -3,6 +3,22 @@ import pandas as pd
 import streamlit as st
 import src.pokeapi_client as pokeapi
 
+TYPE_COLORS = {
+    "fire": "#F08030", "water": "#6890F0", "grass": "#78C850", "electric": "#F8D030",
+    "ice": "#98D8D8", "fighting": "#C03028", "poison": "#A040A0", "ground": "#E0C068",
+    "flying": "#A890F0", "psychic": "#F85888", "bug": "#A8B820", "rock": "#B8A038",
+    "ghost": "#705898", "dragon": "#7038F8", "dark": "#705848", "steel": "#B8B8D0",
+    "fairy": "#EE99AC", "normal": "#A8A878"
+}
+
+def get_pokemon_color(pokemon_data: dict) -> str:
+    """Gets the hex color mapping for a pokemon's primary type."""
+    types = pokeapi.get_types(pokemon_data)
+    if types:
+        primary_type = types[0].lower()
+        return TYPE_COLORS.get(primary_type, "#A8A878")
+    return "#A8A878"
+
 def render_stat_comparison(p1_data: dict, p2_data: dict):
     """
     Renders a grouped bar chart comparing the base stats of two Pokemon.
@@ -36,12 +52,18 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
                         var_name="Pokemon", value_name="Base Stat")
     
     # 4. Create the grouped bar chart
+    color_map = {
+        p1_name: get_pokemon_color(p1_data),
+        p2_name: get_pokemon_color(p2_data)
+    }
+    
     fig = px.bar(
         melted_df, 
         x="Stat", 
         y="Base Stat", 
         color="Pokemon", 
         barmode="group",
+        color_discrete_map=color_map,
         title="Base Stat Comparison",
         text_auto=True
     )
@@ -61,7 +83,7 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
     
     return fig
 
-def render_hp_history(hp_history_list: list[dict]):
+def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data: dict = None):
     """
     Renders a line chart showing HP over time for both Pokemon.
     Requirements:
@@ -74,6 +96,15 @@ def render_hp_history(hp_history_list: list[dict]):
         
     # 1. Build the DataFrame
     df = pd.DataFrame(hp_history_list)
+    df["Pokemon"] = df["Pokemon"].str.capitalize()
+    
+    # Optional Color Mapping
+    color_map = None
+    if p1_data and p2_data:
+        color_map = {
+            p1_data["name"].capitalize(): get_pokemon_color(p1_data),
+            p2_data["name"].capitalize(): get_pokemon_color(p2_data)
+        }
     
     # 2. Create the line chart
     fig = px.line(
@@ -81,6 +112,7 @@ def render_hp_history(hp_history_list: list[dict]):
         x="Round", 
         y="HP", 
         color="Pokemon", 
+        color_discrete_map=color_map,
         markers=True,
         title="HP Over Time"
     )
