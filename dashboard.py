@@ -4,11 +4,36 @@ import src.ui_components as ui
 import src.battle_engine as battle
 import src.pokeapi_client as pokeapi
 import src.charts as charts
+import src.battle_playback as playback
+
+@st.cache_data(show_spinner=False)
+def fetch_all_pokemon_names() -> list[str]:
+    """Fetches up to 2000 pokemon names from PokeAPI for the searchable dropdown."""
+    import requests
+    try:
+        response = requests.get("https://pokeapi.co/api/v2/pokemon?limit=2000", timeout=10)
+        response.raise_for_status()
+        return sorted([p["name"] for p in response.json().get("results", [])])
+    except Exception:
+        return []
+
+def load_css(file_name: str):
+    """Loads a CSS file and injects it into the Streamlit app."""
+    try:
+        with open(file_name) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass
 
 def main():
     st.set_page_config(page_title="Pokemon Combat Simulator", layout="wide")
+    load_css("ui.css")
+    
     st.title("Pokemon Combat Simulator")
     st.markdown("Select two Pokémon and their moves to simulate a battle!")
+
+    # Pre-fetch list of pokemon for the searchable dropdowns
+    all_pokemon_names = fetch_all_pokemon_names()
 
     # State variables for Agent 5 and 3 to use later
     # We will store them in session state or as local variables depending on execution flow,
@@ -22,7 +47,14 @@ def main():
 
     with col1:
         st.header("Player 1")
-        p1_name = st.text_input("Enter Pokémon Name:", value="pikachu", key="p1_input")
+        p1_selection_method = st.radio("Selection Method:", ["Type name", "Search dropdown"], key="p1_method", horizontal=True)
+        
+        if p1_selection_method == "Type name":
+            p1_name = st.text_input("Enter Pokémon Name:", value="pikachu", key="p1_input")
+        else:
+            default_idx = all_pokemon_names.index("pikachu") if "pikachu" in all_pokemon_names else 0
+            p1_name = st.selectbox("Search Pokémon:", options=all_pokemon_names, index=default_idx, key="p1_select")
+            
         if p1_name:
             with st.spinner(f"Fetching {p1_name}..."):
                 p1_pokemon_data = pokeapi.fetch_pokemon(p1_name)
@@ -40,7 +72,14 @@ def main():
 
     with col2:
         st.header("Player 2")
-        p2_name = st.text_input("Enter Pokémon Name:", value="bulbasaur", key="p2_input")
+        p2_selection_method = st.radio("Selection Method:", ["Type name", "Search dropdown"], key="p2_method", horizontal=True)
+        
+        if p2_selection_method == "Type name":
+            p2_name = st.text_input("Enter Pokémon Name:", value="bulbasaur", key="p2_input")
+        else:
+            default_idx = all_pokemon_names.index("bulbasaur") if "bulbasaur" in all_pokemon_names else 0
+            p2_name = st.selectbox("Search Pokémon:", options=all_pokemon_names, index=default_idx, key="p2_select")
+            
         if p2_name:
             with st.spinner(f"Fetching {p2_name}..."):
                 p2_pokemon_data = pokeapi.fetch_pokemon(p2_name)
@@ -71,6 +110,8 @@ def main():
 
         st.markdown("---")
 
+        show_playback = st.checkbox("Show Battle Playback (Animations)", value=False)
+
         # Battle Button
         if st.button("Battle!", type="primary", use_container_width=True):
             # Prep data for engine
@@ -92,12 +133,23 @@ def main():
             with st.spinner("Simulating Battle..."):
                 results = engine.run_battle()
                 
+            if show_playback:
+                playback.play_battle_animation(
+                    p1_pokemon, 
+                    p2_pokemon, 
+                    results["battle_log"], 
+                    p1_combat_data["stats"]["hp"], 
+                    p2_combat_data["stats"]["hp"]
+                )
+                
             # Announce winner
             st.markdown("### Results")
             if results["winner"] == "Draw":
-                st.info("The battle ended in a Draw!")
+                msg = "The battle ended in a Draw!"
             else:
-                st.success(f"{results['winner'].capitalize()} wins the battle!")
+                msg = f"{results['winner'].capitalize()} wins the battle!"
+                
+            st.markdown(f'<div class="gameboy-dialog">{msg}</div>', unsafe_allow_html=True)
                 
             # Display HP History Chart
             hp_fig = charts.render_hp_history(results["hp_history"])
@@ -107,7 +159,13 @@ def main():
             # Display Battle Log DataFrame
             st.markdown("### Battle Log")
             log_df = pd.DataFrame(results["battle_log"])
-            st.dataframe(log_df, use_container_width=True)
+            
+            # Formatting the Log DataFrame
+            if not log_df.empty:
+                log_df["Round"] = "Round " + log_df["Round"].astype(str)
+                log_df = log_df[["Round", "Attacker", "Move", "Defender", "Damage", "Message"]]
+            
+            st.dataframe(log_df, use_container_width=True, hide_index=True)
             
     else:
         st.warning("Please select valid Pokémon and a damaging move for both players to proceed.")

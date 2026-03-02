@@ -46,6 +46,19 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
         text_auto=True
     )
     
+    # 5. Apply Pokemon Theme
+    fig.update_layout(
+        font=dict(family="'Press Start 2P', monospace", size=10, color="#333"),
+        plot_bgcolor="#f8f8f8",
+        paper_bgcolor="#f8f8f8",
+        margin=dict(l=40, r=40, t=60, b=40),
+        legend=dict(
+            bordercolor="#333",
+            borderwidth=2
+        )
+    )
+    fig.update_traces(marker_line=dict(width=2, color="#333"))
+    
     return fig
 
 def render_hp_history(hp_history_list: list[dict]):
@@ -72,7 +85,20 @@ def render_hp_history(hp_history_list: list[dict]):
         title="HP Over Time"
     )
     
-    # Add some padding to the y-axis so it doesn't clip markers at 0
-    fig.update_layout(yaxis=dict(rangemode='tozero', title="Current HP"), xaxis_title="Round")
+    # 3. Apply Pokemon Theme
+    fig.update_layout(
+        yaxis=dict(rangemode='tozero', title="Current HP", gridcolor="#ddd"), 
+        xaxis_title="Round",
+        xaxis=dict(gridcolor="#ddd"),
+        font=dict(family="'Press Start 2P', monospace", size=10, color="#333"),
+        plot_bgcolor="#f8f8f8",
+        paper_bgcolor="#f8f8f8",
+        margin=dict(l=40, r=40, t=60, b=40),
+        legend=dict(
+            bordercolor="#333",
+            borderwidth=2
+        )
+    )
+    fig.update_traces(line=dict(width=4), marker=dict(size=8, line=dict(width=2, color="#333")))
     
     return fig

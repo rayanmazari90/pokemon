@@ -52,9 +52,9 @@ This document tracks state, current working context, API usage patterns, and ope
 - **Files Touched/Added:** `src/charts.py`, `dashboard.py`
 - **Open Tasks:** None.
 - **Implementation Details:**
-  - **Stat comparison chart:** Uses `pd.DataFrame`, reshapes via `.melt()`, and renders with `px.bar(..., barmode='group')`.
-  - **Battle Log:** Wrapped `results["battle_log"]` in `pd.DataFrame()` and presented using `st.dataframe()`. Schema includes `Round`, `Attacker`, `Defender`, `Move`, `Damage`, `Message`.
-  - **HP History chart:** Wrapped `results["hp_history"]` in `pd.DataFrame()` and mapped using `px.line(..., markers=True)`. Schema includes `Round`, `Pokemon`, `HP` in tidy format.
+  - **Stat comparison chart:** Uses `pd.DataFrame`, reshapes via `.melt()`, and renders with `px.bar(..., barmode='group')`. Applied custom theming using `fig.update_layout` to map the `Press Start 2P` font, thick borders, and `#f8f8f8` background matching the surrounding UI cards.
+  - **Battle Log:** Wrapped `results["battle_log"]` in `pd.DataFrame()` and presented using `st.dataframe(hide_index=True)`. Pre-processed the 'Round' column string and re-ordered the columns for readability.
+  - **HP History chart:** Wrapped `results["hp_history"]` in `pd.DataFrame()` and mapped using `px.line(..., markers=True)`. Applied custom Pokemon-esque theming with `fig.update_layout()`. Schema includes `Round`, `Pokemon`, `HP` in tidy format.
 
 ### Repo/Deploy Agent
 - **Description:** Responsible for deployment, repository management, and environment.
@@ -72,12 +72,26 @@ This document tracks state, current working context, API usage patterns, and ope
 - Created this `docs/HANDOFF.md` template.
 - Created `dashboard.py` and `src/` directory with `pokeapi_client.py`, `battle_engine.py`, `ui_components.py`, and `charts.py` placeholders.
 
-**Bug Fix Agent Edits:**
-- **Files Changed:** `src/charts.py`, `dashboard.py`
+**Theming & UX Agent Edits:**
+- **Files Changed:** `ui.css`, `dashboard.py`, `src/ui_components.py`
 - **What was added/removed:** 
-  - Fixed `AttributeError` in `charts.py` by importing `pokeapi_client` and parsing raw JSON into a dictionary using `get_stats()`.
-  - Updated data preparation in `dashboard.py` `Battle!` button callback so `BattleEngine` receives correctly structured dictionaries for `stats`, `types`, and `move`.
-- **How to run/test:** `streamlit run dashboard.py` and execute a battle. 
+  - Added new `ui.css` applying the 'Press Start 2P' font and defining classes for `.pokemon-card`, `.type-badge`, and `.gameboy-dialog`.
+  - Injected CSS via `st.markdown(unsafe_allow_html=True)` inside `dashboard.py`.
+  - Added `fetch_all_pokemon_names()` in `dashboard.py` to populate a cached list of 2000 Pokemon options.
+  - Added a UI UX toggle inside Player 1 and Player 2 allowing users to switch between typing a name and picking from a pre-loaded dropdown.
+  - Wrapped `render_pokemon_info` inside native HTML applying the CSS cards and colored type badges.
+  - Wrapped the Battle Results into a native `.gameboy-dialog`.
+- **How to run/test:** `streamlit run dashboard.py`. Select the 'Search dropdown' on the UI radio options. Check styles across the UI. Wait for the battle to execute and see the GameBoy styled log section.
+- **Open Issues:** None.
+
+**Battle Playback Agent Edits:**
+- **Files Changed:** `ui.css`, `dashboard.py`, `src/battle_playback.py`
+- **What was added/removed:**
+  - Added CSS animations for lunging (`.anim-lunge-right`, `.anim-lunge-left`) and shaking (`.anim-shake`).
+  - Created custom HP bars (`.hp-bar-bg`, `.hp-bar-fg`) and an HTML flexbox layout for the battle stage placeholder.
+  - Created `play_battle_animation(...)` inside `src/battle_playback.py` using `st.empty()` and string templates.
+  - Added a toggle checkbox in `dashboard.py` to optionally play the animation before rendering grading rubrics.
+- **How to run/test:** `streamlit run dashboard.py`. Select two valid Pokémon and actions. Ensure "Show Battle Playback" is checked. Click "Battle!". Ensure the GameBoy dialogue and HP bars update through each attacking round with small visual animations via CSS keyframes. Once it finishes, the grading rubric charts and dataframe should appear.
 - **Open Issues:** None.
 
 ## How To Run Placeholder App

@@ -14,11 +14,19 @@ def render_pokemon_info(pokemon_data: dict):
     if sprite_url:
         st.image(sprite_url, width=150)
     
-    # Name & Types
+    # Name & Types HTML
     name = pokemon_data.get("name", "Unknown").title()
     types = pokeapi.get_types(pokemon_data)
-    type_str = " / ".join(t.title() for t in types)
-    st.subheader(f"{name} ({type_str})")
+    
+    badges_html = "".join([f'<span class="type-badge type-{t.lower()}">{t}</span>' for t in types])
+    
+    html_content = f"""
+    <div class="pokemon-card">
+        <h3 class="pkmn-text" style="margin-top:0;">{name}</h3>
+        <div>{badges_html}</div>
+    </div>
+    """
+    st.markdown(html_content, unsafe_allow_html=True)
     
     # Stats Table
     stats_dict = pokeapi.get_stats(pokemon_data)
