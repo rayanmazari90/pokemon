@@ -76,10 +76,14 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
         margin=dict(l=40, r=40, t=60, b=40),
         legend=dict(
             bordercolor="#333",
-            borderwidth=2
-        )
+            borderwidth=2,
+            font=dict(color="#333")
+        ),
+        title=dict(font=dict(color="#333")),
+        xaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333")),
+        yaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333"))
     )
-    fig.update_traces(marker_line=dict(width=2, color="#333"))
+    fig.update_traces(marker_line=dict(width=2, color="#333"), textfont_color="#333")
     
     return fig
 
@@ -119,16 +123,18 @@ def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data
     
     # 3. Apply Pokemon Theme
     fig.update_layout(
-        yaxis=dict(rangemode='tozero', title="Current HP", gridcolor="#ddd"), 
+        yaxis=dict(rangemode='tozero', title="Current HP", gridcolor="#ddd", tickfont=dict(color="#333"), title_font=dict(color="#333")), 
         xaxis_title="Round",
-        xaxis=dict(gridcolor="#ddd"),
+        xaxis=dict(gridcolor="#ddd", tickfont=dict(color="#333"), title_font=dict(color="#333")),
         font=dict(family="'Press Start 2P', monospace", size=10, color="#333"),
+        title=dict(font=dict(color="#333")),
         plot_bgcolor="#f8f8f8",
         paper_bgcolor="#f8f8f8",
         margin=dict(l=40, r=40, t=60, b=40),
         legend=dict(
             bordercolor="#333",
-            borderwidth=2
+            borderwidth=2,
+            font=dict(color="#333")
         )
     )
     fig.update_traces(line=dict(width=4), marker=dict(size=8, line=dict(width=2, color="#333")))
