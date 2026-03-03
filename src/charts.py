@@ -72,7 +72,7 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
     fig.update_layout(
         font=dict(family="'Press Start 2P', monospace", size=10, color="#333"),
         plot_bgcolor="#f8f8f8",
-        paper_bgcolor="#f8f8f8",
+        paper_bgcolor="#f0f0f0",
         margin=dict(l=40, r=40, t=60, b=40),
         legend=dict(
             bordercolor="#333",
@@ -80,8 +80,8 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
             font=dict(color="#333")
         ),
         title=dict(font=dict(color="#333")),
-        xaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333")),
-        yaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333"))
+        xaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333"), gridcolor="#ddd"),
+        yaxis=dict(tickfont=dict(color="#333"), title_font=dict(color="#333"), gridcolor="#ddd")
     )
     fig.update_traces(marker_line=dict(width=2, color="#333"), textfont_color="#333")
     
@@ -129,7 +129,7 @@ def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data
         font=dict(family="'Press Start 2P', monospace", size=10, color="#333"),
         title=dict(font=dict(color="#333")),
         plot_bgcolor="#f8f8f8",
-        paper_bgcolor="#f8f8f8",
+        paper_bgcolor="#f0f0f0",
         margin=dict(l=40, r=40, t=60, b=40),
         legend=dict(
             bordercolor="#333",
