@@ -87,7 +87,7 @@ def render_stat_comparison(p1_data: dict, p2_data: dict):
     
     return fig
 
-def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data: dict = None):
+def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data: dict = None, **kwargs):
     """
     Renders a line chart showing HP over time for both Pokemon.
     Requirements:
@@ -102,12 +102,14 @@ def render_hp_history(hp_history_list: list[dict], p1_data: dict = None, p2_data
     df = pd.DataFrame(hp_history_list)
     df["Pokemon"] = df["Pokemon"].str.capitalize()
     
-    # Optional Color Mapping
+    # Optional Color Mapping — use labels to support same-name battles
     color_map = None
     if p1_data and p2_data:
+        p1_label = kwargs.get("p1_label", p1_data["name"]).capitalize()
+        p2_label = kwargs.get("p2_label", p2_data["name"]).capitalize()
         color_map = {
-            p1_data["name"].capitalize(): get_pokemon_color(p1_data),
-            p2_data["name"].capitalize(): get_pokemon_color(p2_data)
+            p1_label: get_pokemon_color(p1_data),
+            p2_label: get_pokemon_color(p2_data)
         }
     
     # 2. Create the line chart

@@ -94,6 +94,16 @@ This document tracks state, current working context, API usage patterns, and ope
 - **How to run/test:** `streamlit run dashboard.py`. Select two valid Pokémon and actions. Ensure "Show Battle Playback" is checked. Click "Battle!". Ensure the GameBoy dialogue and HP bars update through each attacking round with small visual animations via CSS keyframes. Once it finishes, the grading rubric charts and dataframe should appear.
 - **Open Issues:** None.
 
+**Intro Loading Screen (UX Upgrade):**
+- **Files Changed:** `dashboard.py`
+- **What was added/removed:**
+  - Added `INTRO_HTML` constant — a self-contained HTML/CSS/JS block that renders a full-screen Pokémon-style intro overlay on first load.
+  - Added `show_intro_screen()` helper that checks `st.session_state["intro_done"]` so the animation only plays once per browser session (not on every Streamlit rerun).
+  - Animation sequence: black screen flash → Pokéball drops in → "POKÉMON COMBAT SIMULATOR" title rises → "GROUP 8 BATTLE EDITION" typewriter effect → blinking "▶ PRESS START ◀" prompt. Overlay auto-dismisses after 6.5 s or on any click.
+  - Visual extras: twinkling star particles in the background and CSS scanlines for a retro CRT feel.
+- **How to run/test:** `streamlit run dashboard.py`. Open the app in a fresh browser tab (or clear session storage). The intro should play for ~6 s then fade away revealing the main UI. Clicking anywhere on the overlay dismisses it immediately.
+- **Open Issues:** None.
+
 ## How To Run Placeholder App
 ```bash
 streamlit run dashboard.py

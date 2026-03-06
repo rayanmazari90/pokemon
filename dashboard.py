@@ -5,6 +5,7 @@ import src.battle_engine as battle
 import src.pokeapi_client as pokeapi
 import src.charts as charts
 import src.battle_playback as playback
+import src.intro_component as intro
 
 @st.cache_data(show_spinner=False)
 def fetch_all_pokemon_names() -> list[str]:
@@ -25,19 +26,19 @@ def load_css(file_name: str):
     except FileNotFoundError:
         pass
 
+
+
 def main():
     st.set_page_config(page_title="Pokemon Combat Simulator", layout="wide")
     load_css("ui.css")
-    
+    intro.show_intro_screen()
+
     st.title("Pokemon Combat Simulator")
     st.markdown("Select two Pokémon and their moves to simulate a battle!")
 
     # Pre-fetch list of pokemon for the searchable dropdowns
     all_pokemon_names = fetch_all_pokemon_names()
 
-    # State variables for Agent 5 and 3 to use later
-    # We will store them in session state or as local variables depending on execution flow,
-    # but for Streamlit, simple variables are fine since everything reruns.
     p1_pokemon = None
     p2_pokemon = None
     p1_move = None
@@ -97,13 +98,8 @@ def main():
 
     st.markdown("---")
     
-    # ----------------------------------------------------
-    # PLACEHOLDER for Agent 5 (Charts) and Agent 3 (Battle)
-    # ----------------------------------------------------
-    # Both Pokemon and their moves are valid if the condition below is met:
     if p1_pokemon and p2_pokemon and p1_move and p2_move:
         
-        # Stat Comparison Chart
         st.markdown("### Base Stat Comparison")
         stat_fig = charts.render_stat_comparison(p1_pokemon, p2_pokemon)
         st.plotly_chart(stat_fig, use_container_width=True)
@@ -112,9 +108,7 @@ def main():
 
         show_playback = st.checkbox("Show Battle Playback (Animations)", value=True)
 
-        # Battle Button
         if st.button("Battle!", type="primary", use_container_width=True):
-            # Prep data for engine
             p1_combat_data = {
                 "name": p1_pokemon["name"],
                 "stats": pokeapi.get_stats(p1_pokemon),
@@ -135,14 +129,13 @@ def main():
                 
             if show_playback:
                 playback.play_battle_animation(
-                    p1_pokemon, 
-                    p2_pokemon, 
-                    results["battle_log"], 
-                    p1_combat_data["stats"]["hp"], 
+                    p1_pokemon,
+                    p2_pokemon,
+                    results["battle_log"],
+                    p1_combat_data["stats"]["hp"],
                     p2_combat_data["stats"]["hp"]
                 )
                 
-            # Announce winner
             st.markdown("### Results")
             
             winner_img_html = ""
@@ -151,13 +144,20 @@ def main():
             else:
                 msg = f"{results['winner'].capitalize()} wins the battle!"
                 
-                # Retrieve the sprite URL for the winning Pokemon
-                if results["winner"].casefold() == p1_pokemon["name"].casefold():
+                # Use slot to correctly identify winner even when names are identical
+                winner_slot = results.get("winner_slot")
+                if winner_slot == "p1":
                     winner_img_url = pokeapi.get_sprite_url(p1_pokemon)
-                elif results["winner"].casefold() == p2_pokemon["name"].casefold():
+                elif winner_slot == "p2":
                     winner_img_url = pokeapi.get_sprite_url(p2_pokemon)
                 else:
-                    winner_img_url = None
+                    # fallback: match by name (different-name battles)
+                    if results["winner"].casefold() == p1_pokemon["name"].casefold():
+                        winner_img_url = pokeapi.get_sprite_url(p1_pokemon)
+                    elif results["winner"].casefold() == p2_pokemon["name"].casefold():
+                        winner_img_url = pokeapi.get_sprite_url(p2_pokemon)
+                    else:
+                        winner_img_url = None
                     
                 if winner_img_url:
                     winner_img_html = f'<img src="{winner_img_url}" style="width: 80px; height: 80px; margin-right: 15px; image-rendering: pixelated;" />'
@@ -169,16 +169,17 @@ def main():
             </div>
             ''', unsafe_allow_html=True)
                 
-            # Display HP History Chart
-            hp_fig = charts.render_hp_history(results["hp_history"], p1_pokemon, p2_pokemon)
+            hp_fig = charts.render_hp_history(
+                results["hp_history"], p1_pokemon, p2_pokemon,
+                p1_label=results.get("p1_label", p1_pokemon["name"]),
+                p2_label=results.get("p2_label", p2_pokemon["name"])
+            )
             if hp_fig:
                 st.plotly_chart(hp_fig, use_container_width=True)
                 
-            # Display Battle Log DataFrame
             st.markdown("### Battle Log")
             log_df = pd.DataFrame(results["battle_log"])
             
-            # Formatting the Log DataFrame
             if not log_df.empty:
                 log_df["Round"] = "Round " + log_df["Round"].astype(str)
                 log_df = log_df[["Round", "Attacker", "Move", "Defender", "Damage", "Message"]]
@@ -190,4 +191,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

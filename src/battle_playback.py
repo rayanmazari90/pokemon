@@ -53,7 +53,7 @@ def play_battle_animation(p1, p2, battle_log, max_hp1, max_hp2):
         damage = log_entry["Damage"]
         msg = log_entry["Message"]
         
-        is_p1_attacking = (attacker == p1["name"])
+        is_p1_attacking = (log_entry.get("AttackerSlot", "p1") == "p1")
         
         attack_msg = f"{attacker.title()} used {move.title()}!"
         anim1 = "anim-lunge-right" if is_p1_attacking else ""
