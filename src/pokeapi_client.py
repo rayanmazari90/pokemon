@@ -49,20 +49,39 @@ def fetch_type(name: str) -> dict | None:
         return None
 
 def get_sprite_url(pokemon_json: dict) -> str | None:
-    """Extracts the animated sprite URL or falls back to front_default."""
+    """Extracts the animated front sprite or falls back to front_default."""
     if not pokemon_json:
         return None
     sprites = pokemon_json.get("sprites", {})
-    # Try to find the Black/White animated sprite
     try:
-        animated_sprite = sprites.get("versions", {}).get("generation-v", {}).get("black-white", {}).get("animated", {}).get("front_default")
-        if animated_sprite:
-            return animated_sprite
+        anim = (sprites.get("versions", {})
+                .get("generation-v", {})
+                .get("black-white", {})
+                .get("animated", {})
+                .get("front_default"))
+        if anim:
+            return anim
     except Exception:
         pass
-    
-    # Fallback to standard front_default
     return sprites.get("front_default")
+
+
+def get_back_sprite_url(pokemon_json: dict) -> str | None:
+    """Extracts the animated back sprite or falls back to back_default."""
+    if not pokemon_json:
+        return None
+    sprites = pokemon_json.get("sprites", {})
+    try:
+        anim = (sprites.get("versions", {})
+                .get("generation-v", {})
+                .get("black-white", {})
+                .get("animated", {})
+                .get("back_default"))
+        if anim:
+            return anim
+    except Exception:
+        pass
+    return sprites.get("back_default")
 
 def get_stats(pokemon_json: dict) -> dict:
     """Extracts a dictionary of base stats."""

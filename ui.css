@@ -1,317 +1,1262 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* ═══════════════════════════════════════════════════════════════════════════
+   POKÉMON COMBAT SIMULATOR – DESIGN SYSTEM
+   Game Boy Color / Pokémon Crystal — Light Theme
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Apply font styling mostly to headings and custom elements to prevent pandas table garbling,
-   but we'll try to globally apply pixel style where possible in Streamlit */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.stMarkdown,
-.stText,
-p {
-    font-family: 'Press Start 2P', monospace !important;
+/* ── 1. FONTS ──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+/* ── 2. DESIGN TOKENS ──────────────────────────────────────────────────── */
+:root {
+    --pkmn-bg:              #e8e4d4;
+    --pkmn-bg-mid:          #ddd8c8;
+    --pkmn-bg-surface:      #f0ead6;
+    --pkmn-panel:           #f8f4e8;
+    --pkmn-panel-light:     #fffcf0;
+    --pkmn-panel-shadow:    #c8b898;
+    --pkmn-panel-dark:      #e0d8c0;
+    --pkmn-border:          #8a8878;
+    --pkmn-border-thick:    #3a3a30;
+    --pkmn-red:             #e63946;
+    --pkmn-red-dark:        #b82e39;
+    --pkmn-red-light:       #ff6b6b;
+    --pkmn-blue:            #457b9d;
+    --pkmn-blue-dark:       #1d3557;
+    --pkmn-blue-light:      #6baed6;
+    --pkmn-teal:            #38a888;
+    --pkmn-gold:            #c89820;
+    --pkmn-gold-bright:     #f0c040;
+    --pkmn-text-dark:       #1a1a28;
+    --pkmn-text-light:      #f8f4e8;
+    --pkmn-text-muted:      #7a7a68;
+    --pkmn-hp-green:        #58d068;
+    --pkmn-hp-yellow:       #f8d030;
+    --pkmn-hp-red:          #f05038;
+    --pkmn-grass-light:     #78c858;
+    --pkmn-grass-dark:      #58a038;
+    --pkmn-sky-top:         #68b0e8;
+    --pkmn-sky-bottom:      #a0d0f8;
+    --font-pixel:           'Press Start 2P', monospace;
+    --font-body:            'VT323', monospace;
+    --shadow-pixel:         3px 3px 0px rgba(0, 0, 0, 0.12);
+    --shadow-pixel-lg:      5px 5px 0px rgba(0, 0, 0, 0.15);
+    --radius-sm:            2px;
+    --radius-md:            4px;
 }
 
-/* Pokemon Card */
-.pokemon-card {
-    background-color: #f8f8f8;
-    border: 3px solid #333;
-    border-radius: 8px 8px 15px 8px;
-    /* Pokedex slight curve */
-    padding: 10px;
-    margin-bottom: 15px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05), 3px 3px 0px #333;
-    color: #333;
+/* ── 3. GLOBAL BASE ────────────────────────────────────────────────────── */
+* { image-rendering: pixelated; }
+
+html, body,
+[data-testid="stAppViewContainer"],
+[data-testid="stApp"] {
+    background-color: var(--pkmn-bg) !important;
+    color: var(--pkmn-text-dark) !important;
 }
 
-/* Base style for custom typography classes */
-.pkmn-text {
-    font-family: 'Press Start 2P', monospace;
-    color: #333;
+/* Streamlit's fixed header is ~50px; push content below it */
+[data-testid="stMain"] > div {
+    padding-top: 56px !important;
 }
 
-/* Type Badges */
-.type-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 12px;
-    color: white;
-    font-size: 10px;
-    text-transform: uppercase;
-    margin-right: 5px;
-    font-family: 'Press Start 2P', monospace;
-    border: 2px solid #333;
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-pixel) !important;
+    color: var(--pkmn-text-dark) !important;
+    letter-spacing: 1px;
 }
 
-.type-fire {
-    background-color: #F08030;
-}
-
-.type-water {
-    background-color: #6890F0;
-}
-
-.type-grass {
-    background-color: #78C850;
-}
-
-.type-electric {
-    background-color: #F8D030;
-}
-
-.type-ice {
-    background-color: #98D8D8;
-}
-
-.type-fighting {
-    background-color: #C03028;
-}
-
-.type-poison {
-    background-color: #A040A0;
-}
-
-.type-ground {
-    background-color: #E0C068;
-}
-
-.type-flying {
-    background-color: #A890F0;
-}
-
-.type-psychic {
-    background-color: #F85888;
-}
-
-.type-bug {
-    background-color: #A8B820;
-}
-
-.type-rock {
-    background-color: #B8A038;
-}
-
-.type-ghost {
-    background-color: #705898;
-}
-
-.type-dragon {
-    background-color: #7038F8;
-}
-
-.type-dark {
-    background-color: #705848;
-}
-
-.type-steel {
-    background-color: #B8B8D0;
-}
-
-.type-fairy {
-    background-color: #EE99AC;
-}
-
-.type-normal {
-    background-color: #A8A878;
-}
-
-/* GameBoy Dialog Box */
-.gameboy-dialog {
-    background-color: #f8f8f8;
-    border: 4px double #333;
-    /* Double border for retro look */
-    border-width: 6px;
-    border-radius: 12px;
-    padding: 20px 25px;
-    margin: 15px 0;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #333;
-    position: relative;
-    box-shadow: inset -2px -2px 0px rgba(0, 0, 0, 0.1), 4px 4px 0px #333;
-}
-
-/* Little triangle indicating continuation in a dialog box */
-.gameboy-dialog::after {
-    content: '▼';
-    position: absolute;
-    bottom: 10px;
-    right: 15px;
-    font-size: 12px;
-    color: #333;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-
-    0%,
-    49% {
-        opacity: 1;
-    }
-
-    50%,
-    100% {
-        opacity: 0;
-    }
-}
-
-/* Adjust Streamlit specific parts so they aren't unreadable with pixel fonts */
-div[data-testid="stMetricValue"] {
-    font-size: 16px !important;
-    color: #333 !important;
-}
-
-div[data-testid="stMetricLabel"] {
-    font-size: 10px !important;
-    color: #333 !important;
-    opacity: 0.8;
-}
-
-div.stMetric {
-    background-color: #f8f8f8;
-    border: 2px solid #333;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+p, li, label,
+.stMarkdown p, .stText {
+    font-family: var(--font-body) !important;
+    font-size: 20px;
+    color: var(--pkmn-text-dark) !important;
 }
 
 hr {
-    border-top: 4px dashed #333 !important;
+    border: none !important;
+    border-top: 3px dashed var(--pkmn-border) !important;
+    margin: 24px 0 !important;
 }
 
-/* Base styles for dark mode override */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: #333 !important;
+/* ── 4. STREAMLIT CHROME OVERRIDES ─────────────────────────────────────── */
+[data-testid="stHeader"] {
+    background: var(--pkmn-bg) !important;
 }
 
-/* Battle Stage & Animations */
-.battle-stage {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    background-color: #f8f8f8;
-    color: #333;
-    border: 4px solid #333;
-    border-radius: 8px;
-    padding: 30px;
-    margin: 20px 0;
-    min-height: 250px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+section[data-testid="stSidebar"] {
+    background-color: var(--pkmn-bg-mid) !important;
+    border-right: 4px solid var(--pkmn-border-thick) !important;
 }
 
-.pokemon-sprite-container {
-    text-align: center;
-    position: relative;
-    width: 45%;
+[data-testid="stBottomBlockContainer"] {
+    background: var(--pkmn-bg) !important;
 }
 
-.pokemon-sprite-container img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
+/* ── 5. SELECTBOX / DROPDOWN (critical readability fix) ────────────────── */
+
+/* The selectbox outer wrapper */
+div[data-baseweb="select"] {
+    font-family: var(--font-body) !important;
 }
 
-/* HP Bar Container */
-.hp-bar-bg {
-    width: 100%;
-    height: 15px;
-    background-color: #555;
-    border: 2px solid #333;
-    border-radius: 4px;
-    margin-top: 10px;
+/* The visible input box */
+div[data-baseweb="select"] > div {
+    background-color: var(--pkmn-panel) !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--pkmn-text-dark) !important;
+    box-shadow: inset 1px 1px 0 var(--pkmn-panel-light),
+                inset -1px -1px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel);
+    min-height: 44px !important;
+}
+
+/* All text inside the selectbox: selected value, search input, placeholder */
+div[data-baseweb="select"] span,
+div[data-baseweb="select"] input,
+div[data-baseweb="select"] div[data-baseweb="select-value"] *,
+div[data-baseweb="select"] [data-testid="stMarkdownContainer"] {
+    font-family: var(--font-body) !important;
+    font-size: 22px !important;
+    color: var(--pkmn-text-dark) !important;
+    -webkit-text-fill-color: var(--pkmn-text-dark) !important;
+}
+
+/* Placeholder text */
+div[data-baseweb="select"] div[aria-selected="false"],
+div[data-baseweb="select"] [data-baseweb="select-placeholder"] {
+    color: var(--pkmn-text-muted) !important;
+    -webkit-text-fill-color: var(--pkmn-text-muted) !important;
+}
+
+/* Dropdown arrow icon */
+div[data-baseweb="select"] svg {
+    fill: var(--pkmn-text-dark) !important;
+}
+
+/* The dropdown menu popover */
+div[data-baseweb="popover"] {
+    z-index: 999999 !important;
+}
+
+/* The dropdown list container */
+ul[data-baseweb="menu"],
+div[data-baseweb="popover"] > div {
+    background-color: var(--pkmn-panel) !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+/* Each dropdown option */
+li[role="option"] {
+    font-family: var(--font-body) !important;
+    font-size: 22px !important;
+    color: var(--pkmn-text-dark) !important;
+    -webkit-text-fill-color: var(--pkmn-text-dark) !important;
+    padding: 8px 16px !important;
+    background: transparent !important;
+}
+
+/* Hover & selected option */
+li[role="option"]:hover,
+li[role="option"][aria-selected="true"] {
+    background-color: var(--pkmn-gold-bright) !important;
+    color: var(--pkmn-text-dark) !important;
+    -webkit-text-fill-color: var(--pkmn-text-dark) !important;
+}
+
+/* Focused option */
+li[role="option"]:focus,
+li[role="option"][data-highlighted="true"] {
+    background-color: var(--pkmn-gold-bright) !important;
+}
+
+/* ── 6. TEXT INPUT ──────────────────────────────────────────────────────── */
+div[data-baseweb="input"] input,
+input[data-testid="stTextInput"] {
+    font-family: var(--font-body) !important;
+    font-size: 22px !important;
+    background-color: var(--pkmn-panel) !important;
+    color: var(--pkmn-text-dark) !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+/* ── 7. WIDGET LABELS ──────────────────────────────────────────────────── */
+[data-testid="stWidgetLabel"] p,
+.stSelectbox label p {
+    font-family: var(--font-pixel) !important;
+    font-size: 10px !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--pkmn-text-muted) !important;
+}
+
+/* Checkbox */
+[data-testid="stCheckbox"] label span {
+    font-family: var(--font-body) !important;
+    font-size: 20px !important;
+    color: var(--pkmn-text-dark) !important;
+}
+
+/* Metrics */
+div[data-testid="stMetricValue"] {
+    font-family: var(--font-pixel) !important;
+    font-size: 16px !important;
+    color: var(--pkmn-red) !important;
+}
+div[data-testid="stMetricLabel"] {
+    font-family: var(--font-pixel) !important;
+    font-size: 9px !important;
+    text-transform: uppercase;
+    color: var(--pkmn-text-muted) !important;
+}
+div.stMetric {
+    background-color: var(--pkmn-panel) !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 12px !important;
+    box-shadow: inset 1px 1px 0 var(--pkmn-panel-light),
+                inset -1px -1px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel);
+}
+
+/* Dataframes */
+[data-testid="stDataFrame"] {
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
     overflow: hidden;
 }
 
-/* HP Bar Fill - default green */
+/* ── 8. BUTTON SYSTEM ──────────────────────────────────────────────────── */
+
+/* Primary buttons – Pokéball Red */
+button[data-testid="baseButton-primary"],
+.stFormSubmitButton > button {
+    font-family: var(--font-pixel) !important;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, var(--pkmn-red-light), var(--pkmn-red)) !important;
+    color: #fff !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: inset -2px -2px 0 var(--pkmn-red-dark),
+                inset 2px 2px 0 rgba(255,255,255,0.25),
+                var(--shadow-pixel) !important;
+    padding: 12px 28px !important;
+    transition: transform 0.1s, box-shadow 0.1s !important;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+}
+button[data-testid="baseButton-primary"]:hover,
+.stFormSubmitButton > button:hover {
+    transform: translate(-1px, -1px) !important;
+    box-shadow: inset -2px -2px 0 var(--pkmn-red-dark),
+                inset 2px 2px 0 rgba(255,255,255,0.3),
+                5px 5px 0px rgba(0,0,0,0.2) !important;
+}
+button[data-testid="baseButton-primary"]:active,
+.stFormSubmitButton > button:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: inset 2px 2px 0 var(--pkmn-red-dark),
+                1px 1px 0px rgba(0,0,0,0.15) !important;
+}
+
+/* Secondary buttons */
+button[data-testid="baseButton-secondary"] {
+    font-family: var(--font-pixel) !important;
+    font-size: 11px !important;
+    background: linear-gradient(180deg, var(--pkmn-panel), var(--pkmn-panel-dark)) !important;
+    color: var(--pkmn-text-dark) !important;
+    border: 3px solid var(--pkmn-border-thick) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: inset -2px -2px 0 var(--pkmn-panel-shadow),
+                inset 2px 2px 0 var(--pkmn-panel-light),
+                var(--shadow-pixel) !important;
+    padding: 10px 24px !important;
+    transition: transform 0.1s, box-shadow 0.1s !important;
+}
+button[data-testid="baseButton-secondary"]:hover {
+    transform: translate(-1px, -1px) !important;
+    box-shadow: inset -2px -2px 0 var(--pkmn-panel-shadow),
+                inset 2px 2px 0 var(--pkmn-panel-light),
+                5px 5px 0px rgba(0,0,0,0.2) !important;
+}
+button[data-testid="baseButton-secondary"]:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: inset 2px 2px 0 var(--pkmn-panel-shadow),
+                1px 1px 0px rgba(0,0,0,0.1) !important;
+}
+
+/* Disabled */
+button:disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* Giant FIGHT button */
+.fight-btn button[data-testid="baseButton-primary"] {
+    font-size: 18px !important;
+    padding: 20px 48px !important;
+    letter-spacing: 3px;
+    animation: fight-pulse 2s ease-in-out infinite;
+}
+@keyframes fight-pulse {
+    0%, 100% { box-shadow: inset -2px -2px 0 var(--pkmn-red-dark), inset 2px 2px 0 rgba(255,255,255,0.25), 3px 3px 0 rgba(0,0,0,0.12), 0 0 15px rgba(230,57,70,0.25); }
+    50%      { box-shadow: inset -2px -2px 0 var(--pkmn-red-dark), inset 2px 2px 0 rgba(255,255,255,0.25), 3px 3px 0 rgba(0,0,0,0.12), 0 0 35px rgba(230,57,70,0.5); }
+}
+
+/* ── 9. PIXEL PANEL SYSTEM ─────────────────────────────────────────────── */
+.pixel-panel {
+    background: var(--pkmn-panel);
+    border: 4px solid var(--pkmn-border-thick);
+    box-shadow: inset 3px 3px 0px var(--pkmn-panel-light),
+                inset -3px -3px 0px var(--pkmn-panel-shadow),
+                var(--shadow-pixel-lg);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    color: var(--pkmn-text-dark);
+}
+
+/* ── 10. TOP BAR (stays dark for contrast) ─────────────────────────────── */
+.top-bar {
+    background: linear-gradient(180deg, #2a2a48, #1a1a30);
+    border: 4px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pixel-lg);
+    padding: 16px 24px 12px 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.top-bar-title {
+    font-family: var(--font-pixel);
+    font-size: 18px;
+    color: var(--pkmn-gold-bright);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5), 0 0 20px rgba(240,192,64,0.3);
+    letter-spacing: 2px;
+}
+.top-bar-subtitle {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: #8888a0;
+    margin-top: 8px;
+    letter-spacing: 4px;
+}
+
+/* ── 11. STEP INDICATOR ────────────────────────────────────────────────── */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 12px 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 3px solid var(--pkmn-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.step-active {
+    background: var(--pkmn-gold-bright);
+    color: var(--pkmn-text-dark);
+    border-color: var(--pkmn-border-thick);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.4),
+                inset -1px -1px 0 rgba(0,0,0,0.1),
+                var(--shadow-pixel);
+    transform: scale(1.05);
+}
+.step-done {
+    background: var(--pkmn-teal);
+    color: #fff;
+    border-color: var(--pkmn-border-thick);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2),
+                2px 2px 0 rgba(0,0,0,0.1);
+}
+.step-pending {
+    background: var(--pkmn-panel-dark);
+    color: var(--pkmn-text-muted);
+    border-color: var(--pkmn-border);
+}
+.step-connector {
+    width: 24px;
+    height: 3px;
+    background: var(--pkmn-border);
+    flex-shrink: 0;
+}
+.connector-done { background: var(--pkmn-teal); }
+
+/* ── 12. PLAYER HEADERS ────────────────────────────────────────────────── */
+.player-header {
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    letter-spacing: 2px;
+    padding: 10px 16px;
+    border: 3px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-pixel);
+}
+.player-header.p1 {
+    background: linear-gradient(135deg, var(--pkmn-red), var(--pkmn-red-dark));
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+}
+.player-header.p2 {
+    background: linear-gradient(135deg, var(--pkmn-blue), var(--pkmn-blue-dark));
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+}
+
+/* ── 13. TRAINER CARD ──────────────────────────────────────────────────── */
+.trainer-card {
+    background: var(--pkmn-panel);
+    border: 4px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    box-shadow: inset 3px 3px 0 var(--pkmn-panel-light),
+                inset -3px -3px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel-lg);
+    overflow: hidden;
+    color: var(--pkmn-text-dark);
+}
+.trainer-card-header {
+    padding: 8px 16px;
+    text-align: center;
+    border-bottom: 3px solid var(--pkmn-border-thick);
+}
+.trainer-card-header.tc-p1 {
+    background: linear-gradient(90deg, var(--pkmn-red), var(--pkmn-red-dark));
+}
+.trainer-card-header.tc-p2 {
+    background: linear-gradient(90deg, var(--pkmn-blue), var(--pkmn-blue-dark));
+}
+.trainer-card-header span {
+    font-family: var(--font-pixel) !important;
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+}
+.trainer-card-body {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+}
+.trainer-card-sprite {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    background: var(--pkmn-panel-dark);
+    border: 3px solid var(--pkmn-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.06);
+}
+.trainer-card-sprite img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+.trainer-card-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 14px;
+    color: var(--pkmn-text-dark);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+.trainer-card-types {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.trainer-card-stats {
+    padding: 12px 16px;
+    border-top: 2px solid var(--pkmn-panel-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ── 14. STAT BARS ─────────────────────────────────────────────────────── */
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.stat-label {
+    font-family: var(--font-pixel) !important;
+    font-size: 8px;
+    color: var(--pkmn-text-dark);
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+.stat-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: #c8c0a8;
+    border: 2px solid var(--pkmn-border-thick);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.stat-bar-fg {
+    height: 100%;
+    border-radius: 1px;
+    transition: width 0.6s ease;
+}
+.stat-value {
+    font-family: var(--font-pixel) !important;
+    font-size: 9px;
+    color: var(--pkmn-text-dark);
+    width: 28px;
+    text-align: left;
+    flex-shrink: 0;
+}
+.stat-hp  .stat-bar-fg { background: #58d068; }
+.stat-atk .stat-bar-fg { background: #f05038; }
+.stat-def .stat-bar-fg { background: #f0a030; }
+.stat-spa .stat-bar-fg { background: #6888f0; }
+.stat-spd .stat-bar-fg { background: #78c850; }
+.stat-spe .stat-bar-fg { background: #f85088; }
+
+/* ── 15. TYPE BADGES ───────────────────────────────────────────────────── */
+.type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 2px solid var(--pkmn-border-thick);
+    border-radius: 2px;
+    font-family: var(--font-pixel) !important;
+    font-size: 8px;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    letter-spacing: 0.5px;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.25),
+                inset -1px -1px 0 rgba(0,0,0,0.15),
+                2px 2px 0 rgba(0,0,0,0.1);
+}
+.type-normal   { background: #9a9a6c; }
+.type-fire     { background: #f07028; }
+.type-water    { background: #6888f0; }
+.type-grass    { background: #78c850; }
+.type-electric { background: #f0c830; color: var(--pkmn-text-dark); text-shadow: none; }
+.type-ice      { background: #98d8d0; color: var(--pkmn-text-dark); text-shadow: none; }
+.type-fighting { background: #c02820; }
+.type-poison   { background: #a040a0; }
+.type-ground   { background: #e0b868; color: var(--pkmn-text-dark); text-shadow: none; }
+.type-flying   { background: #a890f0; }
+.type-psychic  { background: #f85888; }
+.type-bug      { background: #a8b020; }
+.type-rock     { background: #b0a038; }
+.type-ghost    { background: #705898; }
+.type-dragon   { background: #7038f8; }
+.type-dark     { background: #685848; }
+.type-steel    { background: #b0b0c8; color: var(--pkmn-text-dark); text-shadow: none; }
+.type-fairy    { background: #e898a8; }
+
+/* ── 16. MOVE PANEL ────────────────────────────────────────────────────── */
+.move-panel {
+    background: var(--pkmn-panel);
+    border: 4px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    box-shadow: inset 3px 3px 0 var(--pkmn-panel-light),
+                inset -3px -3px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel);
+    overflow: hidden;
+}
+.move-panel-header {
+    padding: 8px 14px;
+    border-bottom: 3px solid var(--pkmn-border-thick);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.move-panel-header .move-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 11px;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    text-transform: uppercase;
+}
+.move-panel-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px 14px;
+}
+.move-stat { text-align: center; }
+.move-stat-label {
+    font-family: var(--font-pixel) !important;
+    font-size: 7px;
+    color: var(--pkmn-text-dark);
+    opacity: 0.6;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.move-stat-value {
+    font-family: var(--font-pixel) !important;
+    font-size: 13px;
+    color: var(--pkmn-text-dark);
+}
+
+/* ── 17. HP HUD ────────────────────────────────────────────────────────── */
+.hp-hud {
+    background: var(--pkmn-panel);
+    border: 3px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: inset 2px 2px 0 var(--pkmn-panel-light),
+                inset -2px -2px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel);
+    min-width: 180px;
+    max-width: 260px;
+}
+.hp-hud-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 11px;
+    color: var(--pkmn-text-dark);
+    margin-bottom: 6px;
+}
+.hp-hud-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.hp-hud-label {
+    font-family: var(--font-pixel) !important;
+    font-size: 9px;
+    color: var(--pkmn-hp-green);
+    font-weight: bold;
+}
+.hp-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: #484848;
+    border: 2px solid var(--pkmn-border-thick);
+    border-radius: 2px;
+    overflow: hidden;
+}
 .hp-bar-fg {
     height: 100%;
-    background-color: #78C850;
-    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    background: var(--pkmn-hp-green);
+    transition: width 0.5s ease, background-color 0.3s;
+    border-radius: 1px;
+}
+.hp-med { background-color: var(--pkmn-hp-yellow) !important; }
+.hp-low { background-color: var(--pkmn-hp-red) !important; }
+.hp-hud-values {
+    font-family: var(--font-pixel) !important;
+    font-size: 10px;
+    color: var(--pkmn-text-dark);
+    text-align: right;
+    margin-top: 4px;
 }
 
-.hp-med {
-    background-color: #F8D030 !important;
+/* ── 18. BATTLE ARENA (Game-Boy-style contained screen) ────────────────── */
+.battle-arena-box {
+    max-width: 640px;
+    margin: 12px auto 16px auto;
+    border: 6px solid #1a1a18;
+    border-radius: 6px;
+    box-shadow:
+        0 0 0 3px #3a3a30,
+        0 0 0 6px #1a1a18,
+        8px 8px 0 rgba(0,0,0,0.18);
+    overflow: hidden;
+    background: linear-gradient(180deg,
+        var(--pkmn-sky-top) 0%,
+        var(--pkmn-sky-bottom) 36%,
+        #70b848 36%,
+        #60a840 42%,
+        var(--pkmn-grass-light) 42%,
+        var(--pkmn-grass-dark) 100%);
+    position: relative;
 }
 
-/* yellow */
-.hp-low {
-    background-color: #C03028 !important;
+/* Subtle horizontal grass lines for texture */
+.battle-arena-box::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 42%; bottom: 0;
+    background: repeating-linear-gradient(
+        180deg,
+        transparent, transparent 12px,
+        rgba(0,0,0,0.03) 12px, rgba(0,0,0,0.03) 14px
+    );
+    pointer-events: none;
 }
 
-/* red */
-
-/* Animations */
-.anim-lunge-right img {
-    animation: lunge-right 0.3s ease-in-out;
+/* Top row: opponent HUD (left) + opponent sprite (right) */
+.arena-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 24px;
+    min-height: 155px;
+    position: relative;
+    z-index: 1;
+}
+.arena-row-top .hp-hud { margin-top: 0; }
+.arena-row-top .battle-sprite {
+    align-self: flex-end;
+    text-align: center;
+}
+.arena-row-top .battle-sprite img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.2));
 }
 
-.anim-lunge-left img {
-    animation: lunge-left 0.3s ease-in-out;
+/* Bottom row: player sprite (left) + player HUD (right) */
+.arena-row-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 24px 16px 24px;
+    min-height: 175px;
+    position: relative;
+    z-index: 1;
+}
+.arena-row-bottom .battle-sprite { text-align: center; }
+.arena-row-bottom .battle-sprite img {
+    width: 128px;
+    height: 128px;
+    object-fit: contain;
+    filter: drop-shadow(3px 4px 0 rgba(0,0,0,0.25));
+}
+.arena-row-bottom .hp-hud { margin-bottom: 8px; }
+
+/* Grass mound platforms under each sprite */
+.ground-shadow {
+    width: 110px;
+    height: 22px;
+    background: radial-gradient(ellipse,
+        #58a038 0%, #68b048 35%, transparent 70%);
+    border-radius: 50%;
+    margin: -10px auto 0;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+}
+.ground-shadow-lg {
+    width: 150px;
+    height: 28px;
 }
 
-.anim-shake img {
-    animation: shake 0.4s ease-in-out;
+.battle-sprite-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 8px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
 }
+
+/* ── 18b. ARENA THEMES (type-based) ────────────────────────────────────── */
+
+/* ▸ GRASS (default – already set on .battle-arena-box) */
+.arena-grass .ground-shadow { background: radial-gradient(ellipse, #58a038 0%, #68b048 35%, transparent 70%); }
+
+/* ▸ WATER / BEACH */
+.arena-water {
+    background: linear-gradient(180deg,
+        #4890d0 0%, #70b0e8 30%,
+        #e8d898 30%, #dcc878 34%,
+        #4080c0 34%, #3068a8 65%,
+        #2858a0 100%) !important;
+}
+.arena-water::after {
+    top: 34% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 10px,
+        rgba(255,255,255,0.06) 10px, rgba(255,255,255,0.06) 12px
+    ) !important;
+}
+.arena-water .ground-shadow {
+    background: radial-gradient(ellipse, #c8b878 0%, #b8a868 35%, transparent 70%);
+}
+
+/* ▸ CAVE / ROCK */
+.arena-cave {
+    background: linear-gradient(180deg,
+        #2a2018 0%, #3a2820 20%,
+        #584838 20%, #685848 36%,
+        #907858 36%, #806848 65%,
+        #705838 100%) !important;
+}
+.arena-cave::after {
+    top: 36% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 16px,
+        rgba(0,0,0,0.06) 16px, rgba(0,0,0,0.06) 18px
+    ) !important;
+}
+.arena-cave .ground-shadow {
+    background: radial-gradient(ellipse, #685838 0%, #786848 35%, transparent 70%);
+}
+.arena-cave .battle-sprite-name { color: rgba(220,200,170,0.6); }
+
+/* ▸ VOLCANO / FIRE */
+.arena-volcano {
+    background: linear-gradient(180deg,
+        #802010 0%, #b84020 28%,
+        #c85830 28%, #a04020 32%,
+        #383030 32%, #302828 60%,
+        #282020 100%) !important;
+    box-shadow:
+        0 0 0 3px #3a3a30,
+        0 0 0 6px #1a1a18,
+        8px 8px 0 rgba(0,0,0,0.18),
+        inset 0 -40px 60px -20px rgba(255,80,30,0.12) !important;
+}
+.arena-volcano::after {
+    top: 32% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 20px,
+        rgba(255,100,30,0.04) 20px, rgba(255,100,30,0.04) 22px
+    ) !important;
+}
+.arena-volcano .ground-shadow {
+    background: radial-gradient(ellipse, #484040 0%, #3a3030 35%, transparent 70%);
+}
+.arena-volcano .battle-sprite-name { color: rgba(255,180,140,0.6); }
+
+/* ▸ SNOW / ICE */
+.arena-snow {
+    background: linear-gradient(180deg,
+        #90a8c0 0%, #b8c8d8 30%,
+        #d0d8e0 30%, #c8d0d8 36%,
+        #e0e8f0 36%, #d8e4f0 65%,
+        #f0f8ff 100%) !important;
+}
+.arena-snow::after { display: none !important; }
+.arena-snow .ground-shadow {
+    background: radial-gradient(ellipse, #b8c8d8 0%, #c8d0d8 35%, transparent 70%);
+}
+.arena-snow .battle-sprite-name { color: rgba(60,80,100,0.5); }
+
+/* ▸ NIGHT / GHOST / DARK */
+.arena-night {
+    background: linear-gradient(180deg,
+        #08081c 0%, #101038 28%,
+        #182010 28%, #182810 34%,
+        #203010 34%, #182808 60%,
+        #101808 100%) !important;
+}
+.arena-night::after {
+    top: 34% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 14px,
+        rgba(0,0,0,0.05) 14px, rgba(0,0,0,0.05) 16px
+    ) !important;
+}
+.arena-night .ground-shadow {
+    background: radial-gradient(ellipse, #283818 0%, #203010 35%, transparent 70%);
+}
+.arena-night .battle-sprite-name { color: rgba(160,180,200,0.5); }
+
+/* Stars for night theme */
+.arena-night::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 30%;
+    background-image:
+        radial-gradient(1px 1px at 15% 20%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 40% 10%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 65% 25%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 80% 8%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 25% 5%, #dde 50%, transparent 100%),
+        radial-gradient(2px 2px at 55% 15%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 90% 18%, #dde 50%, transparent 100%),
+        radial-gradient(1px 1px at 10% 12%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 48% 28%, #fff 50%, transparent 100%),
+        radial-gradient(2px 2px at 72% 4%, #ffe 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+    animation: twinkle 3s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+    0%   { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* ▸ ELECTRIC / STORM */
+.arena-electric {
+    background: linear-gradient(180deg,
+        #404858 0%, #586070 25%,
+        #687078 25%, #788088 32%,
+        #808870 32%, #687058 60%,
+        #586048 100%) !important;
+}
+.arena-electric::after {
+    top: 32% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 14px,
+        rgba(248,208,48,0.04) 14px, rgba(248,208,48,0.04) 16px
+    ) !important;
+}
+.arena-electric .ground-shadow {
+    background: radial-gradient(ellipse, #586048 0%, #687058 35%, transparent 70%);
+}
+/* Subtle yellow lightning flash */
+.arena-electric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    animation: lightning 4s ease-in-out infinite;
+}
+@keyframes lightning {
+    0%, 92%, 96%, 100% { background: transparent; }
+    93%                 { background: rgba(248,216,48,0.08); }
+    95%                 { background: rgba(248,216,48,0.15); }
+}
+
+/* ▸ SKY / DRAGON / FLYING — high altitude */
+.arena-sky {
+    background: linear-gradient(180deg,
+        #3868b0 0%, #5088d0 22%,
+        #e8e0d0 22%, #d8d0c0 28%,
+        #c0b8a0 28%, #a8a088 55%,
+        #908878 100%) !important;
+}
+.arena-sky::after {
+    top: 28% !important;
+    background: repeating-linear-gradient(180deg,
+        transparent, transparent 18px,
+        rgba(0,0,0,0.03) 18px, rgba(0,0,0,0.03) 20px
+    ) !important;
+}
+.arena-sky .ground-shadow {
+    background: radial-gradient(ellipse, #988878 0%, #a89888 35%, transparent 70%);
+}
+/* Drifting clouds */
+.arena-sky::before {
+    content: '';
+    position: absolute;
+    top: 4%; left: -20%; width: 140%; height: 18%;
+    background:
+        radial-gradient(ellipse 80px 20px at 20% 50%, rgba(255,255,255,0.25), transparent),
+        radial-gradient(ellipse 60px 16px at 55% 40%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(ellipse 90px 22px at 80% 60%, rgba(255,255,255,0.18), transparent);
+    pointer-events: none;
+    z-index: 0;
+    animation: clouds 12s linear infinite;
+}
+@keyframes clouds {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(10%); }
+}
+
+/* ── 19. DIALOGUE BOX ──────────────────────────────────────────────────── */
+.dialogue-box {
+    background: var(--pkmn-panel);
+    border: 5px solid var(--pkmn-border-thick);
+    box-shadow: inset 4px 4px 0 var(--pkmn-panel-light),
+                inset -4px -4px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel-lg);
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    margin: 16px 0;
+    min-height: 56px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.dialogue-text {
+    font-family: var(--font-body) !important;
+    font-size: 22px;
+    color: var(--pkmn-text-dark);
+    line-height: 1.5;
+}
+.dialogue-box::after {
+    content: '▼';
+    position: absolute;
+    bottom: 8px;
+    right: 14px;
+    font-size: 10px;
+    color: var(--pkmn-text-dark);
+    animation: cursor-blink 1s step-end infinite;
+}
+@keyframes cursor-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+/* Battle dialogue variant — centered under the arena */
+.dialogue-box-battle {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--pkmn-panel);
+    border: 5px solid var(--pkmn-border-thick);
+    box-shadow: inset 4px 4px 0 var(--pkmn-panel-light),
+                inset -4px -4px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel-lg);
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    min-height: 72px;
+    font-family: var(--font-body) !important;
+    font-size: 22px;
+    color: var(--pkmn-text-dark);
+    line-height: 1.6;
+}
+
+/* ── 20. VS BADGE ──────────────────────────────────────────────────────── */
+.vs-badge {
+    font-family: var(--font-pixel);
+    font-size: 24px;
+    color: var(--pkmn-red);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    text-align: center;
+    padding: 80px 0;
+    letter-spacing: 4px;
+    animation: vs-pulse 1.5s ease-in-out infinite;
+}
+@keyframes vs-pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
+}
+
+/* ── 21. RESULTS BANNER ────────────────────────────────────────────────── */
+.winner-banner {
+    background: linear-gradient(135deg, #1a1040, #2a1850);
+    border: 5px solid var(--pkmn-gold-bright);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 25px rgba(240,192,64,0.2), var(--shadow-pixel-lg);
+    padding: 32px;
+    text-align: center;
+    margin: 16px 0;
+    position: relative;
+    overflow: hidden;
+}
+.winner-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; right: -50%; bottom: -50%;
+    background: conic-gradient(from 0deg, transparent, rgba(240,192,64,0.05), transparent, rgba(240,192,64,0.05));
+    animation: winner-spin 8s linear infinite;
+}
+@keyframes winner-spin { to { transform: rotate(360deg); } }
+.winner-banner-content { position: relative; z-index: 1; }
+.winner-title {
+    font-family: var(--font-pixel) !important;
+    font-size: 10px;
+    color: #8888a0;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+.winner-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 22px;
+    color: var(--pkmn-gold-bright);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5), 0 0 20px rgba(240,192,64,0.4);
+    margin-bottom: 8px;
+}
+.winner-sprite img {
+    width: 120px; height: 120px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 20px rgba(240,192,64,0.4));
+    animation: winner-bounce 1s ease-in-out infinite;
+}
+@keyframes winner-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+}
+.winner-subtitle {
+    font-family: var(--font-body) !important;
+    font-size: 22px;
+    color: #e8e0c8;
+    margin-top: 12px;
+}
+.draw-banner { border-color: #888; }
+
+/* ── 22. TYPE MATCHUP ──────────────────────────────────────────────────── */
+.matchup-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--pkmn-panel);
+    border: 2px solid var(--pkmn-panel-shadow);
+    border-radius: var(--radius-md);
+    margin-bottom: 6px;
+}
+.matchup-label {
+    font-family: var(--font-pixel) !important;
+    font-size: 8px;
+    color: var(--pkmn-text-dark);
+    opacity: 0.7;
+}
+.matchup-mult {
+    font-family: var(--font-pixel) !important;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    border: 2px solid var(--pkmn-border-thick);
+}
+.mult-super  { background: #58d068; color: var(--pkmn-text-dark); }
+.mult-normal { background: var(--pkmn-panel-dark); color: var(--pkmn-text-dark); }
+.mult-resist { background: #f0a030; color: var(--pkmn-text-dark); }
+.mult-immune { background: #888; color: #fff; }
+
+/* ── 23. COMPACT CARD ──────────────────────────────────────────────────── */
+.compact-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--pkmn-panel);
+    border: 3px solid var(--pkmn-border-thick);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: inset 2px 2px 0 var(--pkmn-panel-light),
+                inset -2px -2px 0 var(--pkmn-panel-shadow),
+                var(--shadow-pixel);
+    color: var(--pkmn-text-dark);
+}
+.compact-card img {
+    width: 56px; height: 56px;
+    image-rendering: pixelated;
+}
+.compact-card-name {
+    font-family: var(--font-pixel) !important;
+    font-size: 11px;
+    color: var(--pkmn-text-dark);
+    text-transform: uppercase;
+}
+
+/* ── 24. SECTION TITLE ─────────────────────────────────────────────────── */
+.section-title {
+    font-family: var(--font-pixel) !important;
+    font-size: 12px;
+    color: var(--pkmn-text-dark);
+    border-bottom: 3px solid var(--pkmn-border);
+    padding-bottom: 8px;
+    margin: 24px 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-title::before {
+    content: '►';
+    color: var(--pkmn-red);
+    font-size: 10px;
+}
+
+/* ── 25. ARENA PREVIEW ─────────────────────────────────────────────────── */
+.arena-preview {
+    max-width: 520px;
+    margin: 0 auto 16px auto;
+    background: linear-gradient(180deg,
+        var(--pkmn-sky-top) 0%, var(--pkmn-sky-bottom) 42%,
+        #70b848 42%, var(--pkmn-grass-light) 48%,
+        var(--pkmn-grass-dark) 100%);
+    border: 5px solid #1a1a18;
+    border-radius: 6px;
+    box-shadow:
+        0 0 0 2px #3a3a30,
+        6px 6px 0 rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 28px 24px;
+    min-height: 150px;
+}
+.arena-preview img {
+    width: 96px; height: 96px;
+    image-rendering: pixelated;
+    filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));
+}
+.arena-preview-placeholder {
+    width: 96px; height: 96px;
+    border: 3px dashed rgba(255,255,255,0.35);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: rgba(255,255,255,0.45);
+    background: rgba(0,0,0,0.06);
+}
+.arena-preview-vs {
+    font-family: var(--font-pixel);
+    font-size: 20px;
+    color: var(--pkmn-gold-bright);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+/* ── 26. ANIMATIONS ────────────────────────────────────────────────────── */
+.anim-lunge-right img { animation: lunge-right 0.35s ease-in-out; }
+.anim-lunge-left img  { animation: lunge-left 0.35s ease-in-out; }
+.anim-shake img        { animation: shake 0.4s ease-in-out; }
+.anim-faint img        { animation: faint 0.8s ease-in forwards; }
+.anim-enter            { animation: card-enter 0.4s ease-out; }
 
 @keyframes lunge-right {
-    0% {
-        transform: translateX(0);
-    }
-
-    50% {
-        transform: translateX(40px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
+    0%   { transform: translateX(0); }
+    50%  { transform: translateX(50px); }
+    100% { transform: translateX(0); }
 }
-
 @keyframes lunge-left {
-    0% {
-        transform: translateX(0);
-    }
-
-    50% {
-        transform: translateX(-40px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
+    0%   { transform: translateX(0); }
+    50%  { transform: translateX(-50px); }
+    100% { transform: translateX(0); }
 }
-
 @keyframes shake {
-    0% {
-        transform: translateX(0);
-    }
-
-    20% {
-        transform: translateX(-10px);
-    }
-
-    40% {
-        transform: translateX(10px);
-    }
-
-    60% {
-        transform: translateX(-10px);
-    }
-
-    80% {
-        transform: translateX(10px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-8px); }
+    40%  { transform: translateX(8px); }
+    60%  { transform: translateX(-8px); }
+    80%  { transform: translateX(8px); }
+    100% { transform: translateX(0); }
 }
+@keyframes faint {
+    0%   { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(40px); opacity: 0; }
+}
+@keyframes card-enter {
+    0%   { transform: translateY(16px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ── 27. RESPONSIVE ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .step-indicator { gap: 4px; }
+    .step-item { font-size: 7px; padding: 6px 8px; }
+    .step-connector { width: 12px; }
+    .top-bar-title { font-size: 12px; }
+    .trainer-card-body { flex-direction: column; text-align: center; }
+    .vs-badge { font-size: 18px; padding: 40px 0; }
+    .arena-row-bottom .battle-sprite img { width: 100px; height: 100px; }
+    .arena-row-top .battle-sprite img { width: 72px; height: 72px; }
+}
+
+/* ── 28. HIDE SOUND-EFFECT AUDIO WIDGETS ───────────────────────────────── */
+[data-testid="stAudio"] {
+    position: fixed !important;
+    left: -9999px !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ── 29. UTILITIES ─────────────────────────────────────────────────────── */
+.spacer-sm { height: 8px; }
+.spacer-md { height: 16px; }
+.spacer-lg { height: 32px; }
