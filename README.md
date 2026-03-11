@@ -4,7 +4,7 @@
 
 ### *Master MDBA - IE University — Group 8 | Interactive Battle Dashboard*
 
-*Built with fun and streamlit ⚡ for you Dani hope you will have fun with it ! 😉*
+*Built with fun and streamlit ⚡ for you Dani ! Hope you will have fun with it ! 😉*
 
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -12,7 +12,7 @@
 
 *A turn-based Pokémon battle simulator with type effectiveness, stat comparison charts, and a retro Game Boy–style interface.*
 
-**Live Demo:** [https://pokemon-battle-group8.streamlit.app]
+**Live Demo:** [https://pokemon-battle-edition.streamlit.app]
 
 ---
 
@@ -278,6 +278,6 @@ flowchart TB
 
 <div align="center">
 
-*Built with fun and streamlit ⚡ for you Dani hope you will have fun with it ! 😉*
+*Built with fun and streamlit ⚡ for you Dani ! Hope you will have fun with it ! 😉*
 
 </div>
